@@ -1,0 +1,15 @@
+go 1.21.3
+
+use (
+	.
+	./due
+	./due/config/consul
+	./due/config/etcd
+	./due/eventbus/nats
+	./due/locate/redis
+	./due/log/zap
+	./due/network/tcp
+	./due/network/ws
+	./due/registry/consul
+	./due/transport/rpcx
+)
