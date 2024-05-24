@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"fishserver/pkg/snowflake"
+	"fmt"
+	"strconv"
 
 	"github.com/dobyte/due/v2/cluster"
 	"github.com/dobyte/due/v2/session"
@@ -49,6 +51,36 @@ func (c *Client) SendMsg(route int32, data interface{}) {
 		// Data  interface{} // 消息数据，接收json、proto、[]byte
 	})
 
+}
+
+func (c *Client) SendToOthers(route int32, data interface{}) {
+	for _, userInfo := range c.Room.Users {
+		if userInfo.UserId == c.UserInfo.UserId || userInfo.client == nil {
+			continue
+		}
+		userInfo.client.SendMsg(route, data)
+	}
+}
+
+func (c *Client) Fire(bullet *Bullet) {
+	if bullet.BulletKind == 22 { //激光炮
+		// todo 激光炮
+		c.UserInfo.Power = 0
+		c.sendToOthers([]interface{}{
+			"user_fire_Reply",
+			bullet,
+		})
+		return
+	}
+	c.Room.AliveBullet[bullet.BulletId] = bullet
+	c.sendToOthers([]interface{}{"user_fire_Reply", bullet})
+
+	c.UserInfo.Score -= c.Room.Conf.BaseScore * GetBulletMulti(bullet.BulletKind)
+	c.UserInfo.Bill -= c.Room.Conf.BaseScore * GetBulletMulti(bullet.BulletKind)
+	addPower, _ := strconv.ParseFloat(fmt.Sprintf("%.5f", float64(GetBulletMulti(bullet.BulletKind))/3000), 64)
+	if c.UserInfo.Power < 1 {
+		c.UserInfo.Power += addPower
+	}
 }
 
 // UserInfo->Player

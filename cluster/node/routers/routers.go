@@ -7,9 +7,13 @@ const (
 	CS_ENTER_PUBLIC_ROOM  // 自动进房
 	SC_ENTER_PUBLIC_ROOM  // 自动进房回复
 	CS_CREATE_PUBLIC_ROOM // 建房
-	SC_BUILD_FISH_REPLY
+	CS_USER_FIRE          // 发射普通子弹
+	CS_USER_READY         // 用户准备
+	SC_USER_FIRE_REPLY    //
+
+	SC_ROOM_SYNC        // 更新房间状态 game_sync_push
+	SC_BUILD_FISH_REPLY // 普通鱼群 每1秒发一次
 	SC_BUILD_FISHARRAY_REPLY
-	SC_FISH_ARRAY // 鱼群
 )
 
 /*
@@ -23,20 +27,3 @@ const (
 
 进入房间后，每隔一段时间给客服端发送当前房间的状态（鱼的状态）
 */
-
-// func EnterPublicRoom(ctx node.Context) {
-
-// }
-// func FindOrAddClient(ctx node.Context) {
-// 	// 根据uid来找
-// 	if _, ok := RoomMgrIns.Clients[ctx.UID()]; ok {
-
-// 	} else {
-// 		RoomMgrIns.Clients[ctx.UID()] = &Client{
-// 			GID: ctx.GID(),
-// 			UID: ctx.UID(),
-// 			NID: ctx.NID(),
-// 			CID: ctx.CID(),
-// 		}
-// 	}
-// }
